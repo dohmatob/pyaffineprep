@@ -38,6 +38,8 @@ def get_parser():
         'removed)')
     g_bids.add_argument('-t', '--task-id', action='store',
                         help='select a specific task to be processed')
+    g_bids.add_argument('-r', '--run-id', action='store',
+                        help='select a specific run id to be processed')
 
     return parser
 
@@ -55,7 +57,8 @@ if __name__ == "__main__":
         print sidx, bids_dir
         subject_data = SubjectData()
         subject_data.func = [stuff.filename for stuff in layout.get(
-            subject=sidx, type="bold", modality="func", task=opts.task_id)]
+            subject=sidx, type="bold", modality="func", task=opts.task_id,
+            run=opts.run_id)]
         anat_files = [stuff.filename for stuff in layout.get(
             subject=sidx, modality="anat")]
         subject_data.anat = anat_files[0]
