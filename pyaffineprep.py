@@ -15,6 +15,11 @@ def get_parser():
     parser.add_argument('output_dir', action='store',
                         help='the output path for the outcomes of '
                         'preprocessing and visual reports')
+    parser.add_argument('analysis_level', choices=['participant'],
+                        help='processing stage to be run, only '
+                        '"participant" in the case of '
+                        'pyaffineprep (see BIDS-Apps specification).')
+
     parser.add_argument('--do-stc', action='store_true',
                         help='do slice-timing correction')
     parser.add_argument('--no-mc', action='store_true',
@@ -43,6 +48,9 @@ if __name__ == "__main__":
     subject_list = opts.participant_label
     layout = BIDSLayout(bids_dir)
 
+    if opts.do_stc:
+        raise NotImplementedError("--do-stc option is broken!")
+
     for sidx in subject_list:
         print sidx, bids_dir
         subject_data = SubjectData()
@@ -50,7 +58,6 @@ if __name__ == "__main__":
             subject=sidx, type="bold", modality="func", task=opts.task_id)]
         anat_files = [stuff.filename for stuff in layout.get(
             subject=sidx, modality="anat")]
-        assert len(anat_files) == 1, anat_files
         subject_data.anat = anat_files[0]
         subject_data.output_dir = os.path.join(output_dir, "sub-%s" % sidx)
 
