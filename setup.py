@@ -1,20 +1,20 @@
 #! /usr/bin/env python
 
-descr = """A set of python modules for neuroimaging..."""
+descr = """Intra-subject preprocessing of MRI data in pure Python!"""
 
 import sys
 import os
 import io
 import shutil
 
-DISTNAME = 'pypreprocess'
+DISTNAME = 'pyaffineprep'
 DESCRIPTION = 'Statistical learning for neuroimaging in Python'
 LONG_DESCRIPTION = io.open('README.rst', encoding="utf8").read()
-MAINTAINER = 'Gael Varoquaux'
-MAINTAINER_EMAIL = 'gael.varoquaux@normalesup.org'
-URL = 'http://pypreprocess.github.com'
+MAINTAINER = 'Elvis Dohmatob'
+MAINTAINER_EMAIL = 'gmdopp@gmail.com'
+URL = 'http://pyaffineprep.github.com'
 LICENSE = 'new BSD'
-DOWNLOAD_URL = 'http://pypreprocess.github.com'
+DOWNLOAD_URL = 'http://pyaffineprep.github.com'
 VERSION = '0.1-git'
 
 from numpy.distutils.core import setup
@@ -36,23 +36,19 @@ def configuration(parent_package='', top_path=None):
     config = Configuration(None, parent_package, top_path)
 
     # main modules
-    config.add_subpackage('pypreprocess')
-
-    # spm loader
-    config.add_subpackage('pypreprocess/spm_loader')
+    config.add_subpackage('pyaffineprep')
 
     # extrenal dependecies
-    config.add_subpackage('pypreprocess/external')
-    config.add_subpackage('pypreprocess/external/tempita')
-    config.add_subpackage('pypreprocess/external/nistats')
+    config.add_subpackage('pyaffineprep/externals')
+    config.add_subpackage('pyaffineprep/external/tempita')
 
     # plugin for generating reports
-    config.add_subpackage('pypreprocess/reporting')
-    config.add_data_dir("pypreprocess/reporting/template_reports")
-    config.add_data_dir("pypreprocess/reporting/css")
-    config.add_data_dir("pypreprocess/reporting/js")
-    config.add_data_dir("pypreprocess/reporting/icons")
-    config.add_data_dir("pypreprocess/reporting/images")
+    config.add_subpackage('pyaffineprep/reporting')
+    config.add_data_dir("pyaffineprep/reporting/template_reports")
+    config.add_data_dir("pyaffineprep/reporting/css")
+    config.add_data_dir("pyaffineprep/reporting/js")
+    config.add_data_dir("pyaffineprep/reporting/icons")
+    config.add_data_dir("pyaffineprep/reporting/images")
 
     return config
 
@@ -74,8 +70,8 @@ if __name__ == "__main__":
             shutil.rmtree(local_path)
         print("Copying source tree into build/py3k for 2to3 transformation"
               "...")
-        shutil.copytree(os.path.join(old_path, 'pypreprocess'),
-                        os.path.join(local_path, 'pypreprocess'))
+        shutil.copytree(os.path.join(old_path, 'pyaffineprep'),
+                        os.path.join(local_path, 'pyaffineprep'))
         import lib2to3.main
         from io import StringIO
         print("Converting to Python3 via 2to3...")

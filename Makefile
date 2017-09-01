@@ -29,12 +29,12 @@ inplace:
 	$(PYTHON) setup.py build_ext -i
 
 test-code:
-	$(NOSETESTS) -s pypreprocess
+	$(NOSETESTS) -s pyaffineprep
 
 test-coverage:
 	rm -rf coverage .coverage
 	$(NOSETESTS) -s --with-coverage --cover-html --cover-html-dir=coverage \
-	--cover-package=pypreprocess pypreprocess
+	--cover-package=pyaffineprep pyaffineprep
 
 test: test-code
 

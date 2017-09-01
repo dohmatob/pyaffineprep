@@ -12,8 +12,6 @@ env:
 virtualenv:
   system_site_packages: true
 
-install: source continuous_integration/install.sh
-
 script:
     - make clean
     - make test-code
