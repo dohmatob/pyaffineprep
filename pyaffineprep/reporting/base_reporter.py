@@ -21,13 +21,7 @@ ROOT_DIR = os.path.split(os.path.abspath(__file__))[0]
 ROOT_DIR = os.path.split(os.path.abspath(__file__))[0]
 
 # MISC
-NIPY_URL = "http://nipy.sourceforge.net/nipy/stable/index.html"
-SPM8_URL = "http://www.fil.ion.ucl.ac.uk/spm/software/spm8/"
-PYPREPROCESS_URL = "https://github.com/neurospin/pypreprocess"
-DARTEL_URL = ("http://www.fil.ion.ucl.ac.uk/spm/software/spm8/"
-              "SPM8_Release_Notes.pdf")
-NIPYPE_URL = "http://nipy.sourceforge.net/nipype/"
-NISTATS_URL = "https://github.com/nistats/nistats"
+PYAFFINEPREP_URL = "https://github.com/dohmatob/pyaffineprep"
 
 
 def lines2breaks(lines, delimiter="\n", number_lines=False):

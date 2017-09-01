@@ -28,7 +28,7 @@ from .base_reporter import (Thumbnail,
                             lines2breaks,
                             get_subject_report_html_template,
                             get_subject_report_preproc_html_template,
-                            PYPREPROCESS_URL, DARTEL_URL, ROOT_DIR,
+                            PYAFFINEPREP_URL, ROOT_DIR,
                             commit_subject_thumnbail_to_parent_gallery)
 
 
@@ -64,11 +64,8 @@ def generate_preproc_undergone_docstring(
         realign=False,
         coregister=False,
         coreg_func_to_anat=False,
-        segment=False,
-        normalize=False,
         func_write_voxel_sizes=None,
         anat_write_voxel_sizes=None,
-        dartel=False,
         additional_preproc_undergone="",
         command_line=None,
         details_filename=None,
@@ -85,17 +82,14 @@ def generate_preproc_undergone_docstring(
     """
     fwhm = sanitize_fwhm(fwhm)
     anat_fwhm = sanitize_fwhm(anat_fwhm)
-    if dartel:
-        normalize = False
-        segment = False
 
     # which tools were used ?
     if tools_used is None:
         tools_used = (
-            'All preprocessing was done using <a href="%s">pypreprocess</a>,'
+            'All preprocessing was done using <a href="%s">pyaffineprep</a>,'
             ' a collection of python scripts and modules for '
             'preprocessing functional and anatomical MRI data.' % (
-                PYPREPROCESS_URL))
+                PYAFFINEPREP_URL))
     preproc_undergone = "<p>%s</p>" % tools_used
 
     # what was actually typed at the command line ?
@@ -166,85 +160,6 @@ def generate_preproc_undergone_docstring(
             "possible for activation maps to be projected and appreciated"
             " thereupon."
             "</li>")
-    if segment:
-        preproc_undergone += (
-            "<li>"
-            "Tissue Segmentation has been employed to segment the "
-            "anatomical image into GM, WM, and CSF compartments, using "
-            "template TPMs (Tissue Probability Maps).</li>")
-    if normalize:
-        if segment:
-            if has_func:
-                salt = (" The same deformations have been "
-                        'applied to the functional images.')
-            else: salt = ""
-            preproc_undergone += (
-                "<li>"
-                "The segmented anatomical image has been warped "
-                "into the MNI template space by applying the deformations "
-                "learnt during segmentation.%s</li>" % salt)
-        else:
-            if coregister:
-                preproc_undergone += (
-                    "<li>"
-                    "Deformations from native to standard space have been "
-                    "learnt on the anatomically brain. These deformations "
-                    "have been used to warp the functional and anatomical "
-                    "images into standard space.</li>")
-            else:
-                preproc_undergone += (
-                    "<li>"
-                    "The functional images have been warped from native to "
-                    "standard space via classical normalization.</li>")
-    if dartel:
-        preproc_undergone += (
-            "<li>"
-            "Group/Inter-subject Normalization has been done using the "
-            "SPM8 <a href='%s'>DARTEL</a> to warp subject brains into "
-            "MNI space. "
-            "The idea is to register images by computing a &ldquo;flow"
-            " field&rdquo; which can then be &ldquo;exponentiated"
-            "&rdquo; to generate both forward and backward deformation"
-            "s. Processing begins with the &ldquo;import&rdquo; "
-            "step. This involves taking the parameter files "
-            "produced by the segmentation (NewSegment), and writing "
-            "out rigidly "
-            "transformed versions of the tissue class images, "
-            "such that they are in as close alignment as possible with"
-            " the tissue probability maps. &nbsp; "
-            "The next step is the registration itself. This involves "
-            "the simultaneous registration of e.g. GM with GM, "
-            "WM with WM and 1-(GM+WM) with 1-(GM+WM) (when needed, the"
-            " 1- (GM+WM) class is generated implicitly, so there "
-            "is no need to include this class yourself). This "
-            "procedure begins by creating a mean of all the images, "
-            "which is used as an initial template. Deformations "
-            "from this template to each of the individual images "
-            "are computed, and the template is then re-generated"
-            " by applying the inverses of the deformations to "
-            "the images and averaging. This procedure is repeated a "
-            "number of times. &nbsp;Finally, warped "
-            "versions of the images (or other images that are in "
-            "alignment with them) can be generated. "
-            "</li>") % DARTEL_URL
-    if normalize or dartel:
-        if func_write_voxel_sizes is not None or \
-           anat_write_voxel_sizes is not None:
-            preproc_undergone += "<li>"
-            sep = ""
-            if func_write_voxel_sizes is not None:
-                preproc_undergone += (
-                    "Output functional images have been re-written with voxel "
-                    "size %smm x %smm x %smm.") % tuple(
-                    func_write_voxel_sizes)
-                sep = " "
-            if anat_write_voxel_sizes is not None:
-                preproc_undergone += (
-                    "%sThe output anatomical image has been re-written with "
-                    "voxel "
-                    "size %smm x %smm x %smm.") % tuple([sep] + list(
-                        anat_write_voxel_sizes))
-            preproc_undergone += "</li>"
 
     if additional_preproc_undergone:
         preproc_undergone += additional_preproc_undergone
@@ -260,9 +175,6 @@ def generate_preproc_undergone_docstring(
             "The anatomical image has been "
             "smoothed with a %smm x %smm x %smm "
             "Gaussian kernel.") % tuple(anat_fwhm)
-        if segment:
-            preproc_undergone += (
-                " Warped TPMs have been smoothed with the same kernel.")
     if details_filename is not None:
         preproc_undergone += (
             " <a href=%s>See complete configuration used for preprocessing"
