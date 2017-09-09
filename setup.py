@@ -40,7 +40,7 @@ def configuration(parent_package='', top_path=None):
 
     # extrenal dependecies
     config.add_subpackage('pyaffineprep/externals')
-    config.add_subpackage('pyaffineprep/external/tempita')
+    config.add_subpackage('pyaffineprep/externals/tempita')
 
     # plugin for generating reports
     config.add_subpackage('pyaffineprep/reporting')
